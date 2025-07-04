@@ -1,290 +1,233 @@
 <!DOCTYPE html>
-<html lang="ms">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Tetris Mobile - META MATIK</title>
-    <meta name="description" content="Tetris Mobile by META MATIK: Classic game with a twist">
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;700&display=swap" rel="stylesheet">
+    <title>Kedai H - Pricelist Games</title>
+    <!-- Google Fonts untuk font moden -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+    <!-- FontAwesome untuk ikon -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
     <style>
         body {
-            background: #1a237e;
-            color: #ffd700;
-            font-family: 'Poppins', sans-serif;
-            text-align: center;
+            font-family: 'Poppins', Arial, sans-serif;
+            background: linear-gradient(135deg, #0a1a2e, #1e2a44, #ffd70022);
+            color: #fff;
             margin: 0;
-            padding: 10px;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            height: 100vh;
-            overflow: hidden;
-        }
-        #gameCanvas {
-            width: 100%;
-            max-width: 300px;
-            height: auto;
-            border: 2px solid #ffd700;
-            touch-action: none;
-            opacity: 0;
-            animation: fadeIn 1s forwards 0.2s;
-        }
-        #score {
-            font-size: 20px;
-            margin: 10px 0;
-            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5);
-            opacity: 0;
-            animation: fadeIn 1s forwards;
-        }
-        .controls {
-            display: grid;
-            grid-template-areas:
-                ". rotate ."
-                "left down right";
-            gap: 10px;
-            margin-top: 10px;
-            opacity: 0;
-            animation: fadeIn 1s forwards 0.4s;
-        }
-        .control-btn {
-            background: #ffd700;
-            color: #1a237e;
-            border: none;
-            padding: 15px;
-            font-size: 16px;
-            border-radius: 5px;
-            cursor: pointer;
-            width: 60px;
-            height: 60px;
-            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.3);
-        }
-        .control-btn:hover {
-            background: #ffca28;
-        }
-        #rotate { grid-area: rotate; }
-        #down { grid-area: down; }
-        #left { grid-area: left; }
-        #right { grid-area: right; }
-        a {
-            color: #ffd700;
-            text-decoration: none;
-            margin-top: 10px;
-            display: inline-block;
-            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.3);
-            opacity: 0;
-            animation: fadeIn 1s forwards 0.6s;
-        }
-        #footer {
-            margin-top: 20px;
-            font-size: 1em;
-            color: #ffd700;
-            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.3);
+            padding: 0;
             text-align: center;
-            opacity: 0;
-            animation: fadeIn 1s forwards 0.8s;
+            min-height: 100vh;
         }
-        .social-links {
-            margin-top: 10px;
-            display: flex;
-            gap: 15px;
-            justify-content: center;
+
+        /* Gaya Header */
+        .header-section {
+            padding: 60px 20px;
+            border-bottom: 3px solid #ffd700;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
         }
-        .social-links img {
-            width: 24px;
-            height: 24px;
+
+        .header-section .logo {
+            max-width: 120px;
+            height: auto;
+            margin: 0 auto;
+            animation: pulse 2s infinite;
             transition: transform 0.3s;
         }
-        .social-links img:hover {
+
+        .header-section .logo:hover {
+            transform: scale(1.1);
+        }
+
+        .header-section h1 {
+            font-size: 2.8em;
+            margin: 15px 0;
+            color: #fff;
+            text-shadow: 2px 2px 6px rgba(0, 0, 0, 0.5);
+            font-weight: 600;
+        }
+
+        /* Gaya Butang Pilihan Permainan */
+        .game-options {
+            margin: 40px 0;
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 15px;
+        }
+
+        .game-options a {
+            display: flex;
+            align-items: center;
+            background: #1e2a44;
+            color: #fff;
+            padding: 12px 20px;
+            border-radius: 8px;
+            text-decoration: none;
+            font-size: 1.1em;
+            border: 2px solid #ffd700;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            transition: all 0.3s ease;
+            opacity: 0;
+            animation: fadeInUp 0.5s forwards;
+        }
+
+        .game-options a:nth-child(1) { animation-delay: 0.1s; }
+        .game-options a:nth-child(2) { animation-delay: 0.2s; }
+        .game-options a:nth-child(3) { animation-delay: 0.3s; }
+        .game-options a:nth-child(4) { animation-delay: 0.4s; }
+        .game-options a:nth-child(5) { animation-delay: 0.5s; }
+
+        .game-options a:hover {
+            background: #2a3b5a;
+            transform: translateY(-3px);
+            box-shadow: 0 4px 8px rgba(255, 215, 0, 0.3);
+        }
+
+        .game-options img {
+            max-width: 25px;
+            height: auto;
+            margin-right: 10px;
+        }
+
+        .game-options i {
+            font-size: 20px;
+            margin-right: 10px;
+            color: #ffd700;
+        }
+
+        /* Gaya untuk Join Our Community */
+        .community {
+            margin: 40px 0;
+        }
+
+        .community h2 {
+            font-size: 2.2em;
+            color: #ffd700;
+            margin-bottom: 20px;
+            font-weight: 600;
+            text-transform: uppercase;
+        }
+
+        .community .social-icons {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+        }
+
+        .community a {
+            text-decoration: none;
+            font-size: 2.5em;
+            transition: transform 0.3s, color 0.3s;
+        }
+
+        .community i.whatsapp {
+            color: #25D366;
+        }
+
+        .community a:hover i.whatsapp {
+            color: #1ebe57;
             transform: scale(1.2);
         }
-        @keyframes fadeIn {
-            to { opacity: 1; }
+
+        .community i.tiktok {
+            color: #69C9D0;
         }
+
+        .community a:hover i.tiktok {
+            color: #EE1D52;
+            transform: scale(1.2);
+        }
+
+        /* Animasi */
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+            100% { transform: scale(1); }
+        }
+
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Media Query untuk Responsif */
         @media (max-width: 600px) {
-            #score { font-size: 16px; }
-            .control-btn { width: 50px; height: 50px; font-size: 14px; padding: 12px; }
-            #footer { font-size: 0.8em; }
-            .social-links img { width: 20px; height: 20px; }
-        }
-        @media (max-width: 400px) {
-            #score { font-size: 14px; }
-            .control-btn { width: 40px; height: 40px; font-size: 12px; padding: 10px; }
+            .header-section {
+                padding: 30px 10px;
+            }
+
+            .header-section .logo {
+                max-width: 80px;
+            }
+
+            .header-section h1 {
+                font-size: 1.8em;
+            }
+
+            .game-options a {
+                width: 80%;
+                margin: 10px auto;
+                font-size: 1em;
+                padding: 10px 15px;
+            }
+
+            .game-options img {
+                max-width: 20px;
+            }
+
+            .game-options i {
+                font-size: 18px;
+            }
+
+            .community h2 {
+                font-size: 1.5em;
+            }
+
+            .community a {
+                font-size: 2em;
+            }
         }
     </style>
 </head>
 <body>
-    <div id="score">Skor: 0</div>
-    <canvas id="gameCanvas" width="300" height="600"></canvas>
-    <div class="controls">
-        <button id="rotate" class="control-btn">↻</button>
-        <button id="left" class="control-btn">←</button>
-        <button id="down" class="control-btn">↓</button>
-        <button id="right" class="control-btn">→</button>
-    </div>
-    <a href="index.html">Kembali ke Laman Utama</a>
-    <div id="footer">
-        SEMOGA NISMA NISMA
-        <div class="social-links">
-            <a href="https://www.tiktok.com/@kc._.collecti0n?_t=ZS-8w5A2jjiboI&_r=1" target="_blank"><img src="https://cdn-icons-png.flaticon.com/512/3046/3046121.png" alt="TikTok"></a>
+    <section class="header-section">
+        <img src="https://raw.githubusercontent.com/hzbllh/games/5d830487edd8f40dc38d6fefcfa2b211eb12f3ee/H_20250228_033418_0002.png" alt="Kedai H Logo" class="logo">
+        <h1>Kedai H - Pricelist Games</h1>
+    </section>
+    
+    <section class="game-options">
+        <a href="mlbb.html">
+            <img src="https://raw.githubusercontent.com/hzbllh/games/80feffb50d134cafadad745f71af5d7e2f1354b7/unnamed.jpg" alt="Mobile Legends Icon">
+            Mobile Legends
+        </a>
+        <a href="pubg.html">
+            <img src="https://raw.githubusercontent.com/hzbllh/games/cbc27b2820a2e606d2d052ee4cbfd35228232a05/unnamed.webp" alt="PUBG Icon">
+            PUBG
+        </a>
+        <a href="valorant.html">
+            <img src="https://raw.githubusercontent.com/hzbllh/games/cbc27b2820a2e606d2d052ee4cbfd35228232a05/1WQY5YfS_400x400.jpg" alt="Valorant Icon">
+            Valorant
+        </a>
+        <a href="genshin.html">
+            <img src="https://github.com/hzbllh/games/blob/cfea4671a7c46227344e8fa67ebdce5ebf9944c3/unnamed%20(1).webp?raw=true" alt="Genshin Impact Icon">
+            Genshin Impact
+        </a>
+        <a href="winrate.html">
+            <i class="fas fa-calculator"></i>
+            Winrate Calculator
+        </a>
+    </section>
+
+    <section class="community">
+        <h2>Join Our Community</h2>
+        <div class="social-icons">
+            <a href="https://chat.whatsapp.com/IYzrlrjtP1L2jikkTdiSBX">
+                <i class="fab fa-whatsapp whatsapp"></i>
+            </a>
+            <a href="https://www.tiktok.com/@kedai.h1?_t=ZS-8wNVae7rV5M&_r=1">
+                <i class="fab fa-tiktok tiktok"></i>
+            </a>
         </div>
-    </div>
-    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
-    <script>
-        const canvas = document.getElementById('gameCanvas');
-        const ctx = canvas.getContext('2d');
-        const gridSize = 30;
-        const cols = 10;
-        const rows = 20;
-        let board = Array(rows).fill().map(() => Array(cols).fill(0));
-        let score = 0;
-        let currentPiece = null;
-        let gameOver = false;
-
-        // Bentuk tetromino (I, O, T, L, J, S, Z)
-        const pieces = [
-            [[1, 1, 1, 1]], // I
-            [[1, 1], [1, 1]], // O
-            [[0, 1, 0], [1, 1, 1]], // T
-            [[1, 0, 0], [1, 1, 1]], // L
-            [[0, 0, 1], [1, 1, 1]], // J
-            [[0, 1, 1], [1, 1, 0]], // S
-            [[1, 1, 0], [0, 1, 1]] // Z
-        ];
-        const colors = ['#00f', '#ff0', '#f0f', '#ffa500', '#00f', '#0f0', '#f00'];
-
-        function createPiece() {
-            const index = Math.floor(Math.random() * pieces.length);
-            return { shape: pieces[index], color: colors[index], x: Math.floor(cols / 2) - 1, y: 0 };
-        }
-
-        function draw() {
-            ctx.clearRect(0, 0, canvas.width, canvas.height);
-            // Lukis papan
-            for (let y = 0; y < rows; y++) {
-                for (let x = 0; x < cols; x++) {
-                    if (board[y][x]) {
-                        ctx.fillStyle = board[y][x];
-                        ctx.fillRect(x * gridSize, y * gridSize, gridSize - 1, gridSize - 1);
-                    }
-                }
-            }
-            // Lukis blok semasa
-            if (currentPiece) {
-                currentPiece.shape.forEach((row, dy) => {
-                    row.forEach((value, dx) => {
-                        if (value) {
-                            ctx.fillStyle = currentPiece.color;
-                            ctx.fillRect((currentPiece.x + dx) * gridSize, (currentPiece.y + dy) * gridSize, gridSize - 1, gridSize - 1);
-                        }
-                    });
-                });
-            }
-            document.getElementById('score').textContent = `Skor: ${score}`;
-        }
-
-        function collide(piece, offsetX = 0, offsetY = 0) {
-            return piece.shape.some((row, dy) => {
-                return row.some((value, dx) => {
-                    if (value) {
-                        let x = piece.x + dx + offsetX;
-                        let y = piece.y + dy + offsetY;
-                        return x < 0 || x >= cols || y >= rows || (y >= 0 && board[y][x]);
-                    }
-                    return false;
-                });
-            });
-        }
-
-        function merge() {
-            currentPiece.shape.forEach((row, dy) => {
-                row.forEach((value, dx) => {
-                    if (value) {
-                        board[currentPiece.y + dy][currentPiece.x + dx] = currentPiece.color;
-                    }
-                });
-            });
-        }
-
-        function clearLines() {
-            let lines = 0;
-            for (let y = rows - 1; y >= 0; y--) {
-                if (board[y].every(cell => cell)) {
-                    board.splice(y, 1);
-                    board.unshift(Array(cols).fill(0));
-                    lines++;
-                }
-            }
-            if (lines > 0) {
-                score += lines * 100;
-                confetti({ particleCount: 50, spread: 50, origin: { y: 0.6 } });
-            }
-        }
-
-        function rotatePiece() {
-            const newShape = currentPiece.shape[0].map((_, i) =>
-                currentPiece.shape.map(row => row[i]).reverse()
-            );
-            const tempShape = currentPiece.shape;
-            currentPiece.shape = newShape;
-            if (collide(currentPiece)) {
-                currentPiece.shape = tempShape;
-            }
-        }
-
-        function update() {
-            if (gameOver) return;
-            if (!currentPiece) {
-                currentPiece = createPiece();
-                if (collide(currentPiece)) {
-                    alert('Game Over! Skor: ' + score);
-                    localStorage.setItem('highScore', Math.max(score, localStorage.getItem('highScore') || 0));
-                    board = Array(rows).fill().map(() => Array(cols).fill(0));
-                    score = 0;
-                    gameOver = true;
-                    return;
-                }
-            }
-            if (!collide(currentPiece, 0, 1)) {
-                currentPiece.y++;
-            } else {
-                merge();
-                clearLines();
-                currentPiece = null;
-            }
-            draw();
-        }
-
-        // Kawalan sentuh
-        document.getElementById('left').addEventListener('click', () => {
-            if (!collide(currentPiece, -1, 0)) currentPiece.x--;
-        });
-        document.getElementById('right').addEventListener('click', () => {
-            if (!collide(currentPiece, 1, 0)) currentPiece.x++;
-        });
-        document.getElementById('down').addEventListener('click', () => {
-            if (!collide(currentPiece, 0, 1)) currentPiece.y++;
-        });
-        document.getElementById('rotate').addEventListener('click', rotatePiece);
-
-        // Sokongan kekunci untuk ujian
-        document.addEventListener('keydown', (e) => {
-            if (e.key === 'ArrowLeft' && !collide(currentPiece, -1, 0)) currentPiece.x--;
-            else if (e.key === 'ArrowRight' && !collide(currentPiece, 1, 0)) currentPiece.x++;
-            else if (e.key === 'ArrowDown' && !collide(currentPiece, 0, 1)) currentPiece.y++;
-            else if (e.key === 'ArrowUp') rotatePiece();
-        });
-
-        // Laraskan saiz kanvas
-        function resizeCanvas() {
-            const size = Math.min(window.innerWidth * 0.8, 300);
-            canvas.width = size;
-            canvas.height = size * 2;
-        }
-        window.addEventListener('resize', resizeCanvas);
-        resizeCanvas();
-
-        setInterval(update, 1000); // Jatuh setiap 1 saat
-    </script>
+    </section>
 </body>
 </html>
