@@ -11,8 +11,6 @@
     :root {
       --main-bg: #1a237e;
       --accent-color: #ffd700;
-      --dark-mode-bg: #121212;
-      --dark-mode-text: #ffffff;
     }
     body {
       margin: 0;
@@ -20,7 +18,6 @@
       font-family: 'Poppins', sans-serif;
       min-height: 100vh;
       overflow-x: hidden;
-      transition: background-color 0.3s;
     }
     #particles-js {
       position: fixed;
@@ -35,90 +32,51 @@
       50% { background-position: 100% 100%; }
       100% { background-position: 0% 0%; }
     }
-    .nav {
-      position: sticky;
-      top: 0;
-      background: rgba(26, 35, 126, 0.9);
-      padding: 10px 20px;
-      display: flex;
-      justify-content: space-around;
-      align-items: center;
-      z-index: 10;
-    }
-    .nav .nav-item {
-      color: var(--accent-color);
-      text-decoration: none;
-      font-weight: bold;
-      padding: 10px;
-      transition: transform 0.3s, box-shadow 0.3s;
-    }
-    .nav .nav-item:hover {
-      transform: scale(1.1);
-      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
-    }
     .hero {
       text-align: center;
-      padding: 80px 20px 40px;
+      padding: 50px 20px;
       position: relative;
       z-index: 1;
+      opacity: 0;
+      animation: fadeIn 1s forwards;
     }
     .hero img {
-      max-width: 250px;
+      max-width: 200px;
       height: auto;
       margin-bottom: 20px;
       transition: transform 0.3s;
+      opacity: 0;
+      animation: fadeIn 1s forwards 0.2s;
     }
     .hero img:hover {
       transform: scale(1.05) rotate(5deg);
     }
     .hero h1 {
-      font-size: 3em;
+      font-size: 2.5em;
       margin: 0;
       color: var(--accent-color);
-      text-shadow: 3px 3px 6px rgba(0, 0, 0, 0.5);
-      animation: fadeInUp 1s ease-out;
+      text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+      opacity: 0;
+      animation: fadeIn 1s forwards 0.4s;
     }
-    .game-cards {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-      gap: 20px;
-      padding: 20px;
-      max-width: 1000px;
-      margin: 0 auto;
-    }
-    .card {
-      background: rgba(255, 255, 255, 0.1);
-      border-radius: 10px;
-      padding: 20px;
-      text-align: center;
-      transition: transform 0.3s, box-shadow 0.3s;
-      cursor: pointer;
-    }
-    .card:hover {
-      transform: translateY(-10px);
-      box-shadow: 0 10px 20px rgba(0, 0, 0, 0.3);
-    }
-    .card img {
-      max-width: 100px;
-      height: auto;
-      margin-bottom: 10px;
-    }
-    .card h3 {
-      font-size: 1.2em;
-      color: var(--accent-color);
-      margin: 10px 0;
-      text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.3);
-    }
-    .card a {
-      text-decoration: none;
-      color: var(--accent-color);
-      font-weight: bold;
-      padding: 10px 20px;
-      background: rgba(255, 215, 0, 0.8);
+    .hero button {
+      background: var(--accent-color);
+      color: var(--main-bg);
+      padding: 15px 30px;
+      border: none;
       border-radius: 5px;
-      transition: background 0.3s;
+      font-size: 1em;
+      font-weight: bold;
+      cursor: pointer;
+      margin: 10px 0;
+      display: block;
+      width: 200px;
+      margin-left: auto;
+      margin-right: auto;
+      opacity: 0;
+      animation: fadeIn 1s forwards 0.6s;
     }
-    .card a:hover {
+    .hero button:hover {
       background: #ffca28;
     }
     #footer {
@@ -143,75 +101,34 @@
     .social-links img:hover {
       transform: rotate(360deg) scale(1.2);
     }
-    .dark-mode-toggle {
-      position: fixed;
-      top: 10px;
-      right: 10px;
-      background: var(--accent-color);
-      color: var(--main-bg);
-      border: none;
-      padding: 10px;
-      border-radius: 5px;
-      cursor: pointer;
-      z-index: 20;
-      transition: background 0.3s;
-    }
-    .dark-mode-toggle:hover {
-      background: #ffca28;
-    }
     @keyframes fadeIn {
       from { opacity: 0; }
       to { opacity: 1; }
     }
-    @keyframes fadeInUp {
-      from { opacity: 0; transform: translateY(20px); }
-      to { opacity: 1; transform: translateY(0); }
-    }
     @media (max-width: 600px) {
-      .nav { flex-direction: column; gap: 10px; }
-      .hero img { max-width: 150px; }
-      .hero h1 { font-size: 1.8em; }
-      .game-cards { grid-template-columns: 1fr; }
+      .hero img { max-width: 120px; }
+      .hero h1 { font-size: 1.5em; }
+      .hero button { padding: 10px 20px; width: 150px; font-size: 0.9em; }
       #footer { font-size: 0.8em; }
       .social-links img { width: 20px; height: 20px; }
+    }
+    @media (max-width: 400px) {
+      .hero img { max-width: 100px; }
+      .hero h1 { font-size: 1.2em; }
+      .hero button { width: 120px; font-size: 0.8em; }
     }
   </style>
 </head>
 <body>
   <div id="particles-js"></div>
-  <button class="dark-mode-toggle" onclick="toggleDarkMode()">Toggle Dark Mode</button>
-  <nav class="nav">
-    <a href="generator.html" class="nav-item">Meta Matik</a>
-    <a href="ranking.html" class="nav-item">Ranking</a>
-    <a href="tetris.html" class="nav-item">Tetris</a>
-    <a href="snake.html" class="nav-item">Snake</a>
-  </nav>
   <section class="hero">
     <img src="https://raw.githubusercontent.com/hzbllh/bagi-meta/2f3691f71735efe80b4212706475c1c133afa2b2/IMG-20250302-WA0002-removebg-preview.png" alt="ChiiDy Logo" loading="lazy">
     <h1>ChiiDy sdn. bhd.</h1>
+    <a href="generator.html"><button>Meta Matik</button></a>
+    <a href="ranking.html"><button>Ranking</button></a>
+    <a href="tetris.html"><button>Tetris</button></a>
+    <a href="snake.html"><button>Snake</button></a>
   </section>
-  <div class="game-cards">
-    <div class="card">
-      <img src="https://via.placeholder.com/100?text=Meta+Matik" alt="Meta Matik">
-      <h3>Meta Matik</h3>
-      <a href="generator.html">Main Sekarang</a>
-    </div>
-    <div class="card">
-      <img src="https://via.placeholder.com/100?text=Ranking" alt="Ranking">
-      <h3>Ranking</h3>
-      <a href="ranking.html">Main Sekarang</a>
-    </div>
-    <div class="card">
-      <img src="https://via.placeholder.com/100?text=Tetris" alt="Tetris">
-      <h3>Tetris</h3>
-      <a href="tetris.html">Main Sekarang</a>
-    </div>
-    <div class="card">
-      <img src="https://via.placeholder.com/100?text=Snake" alt="Snake">
-      <h3>Snake</h3>
-      <a href="snake.html">Main Sekarang</a>
-    </div>
-  </div>
   <div id="footer">
     SEMOGA NISMA NISMA
     <div class="social-links">
@@ -235,30 +152,6 @@
         modes: { repulse: { distance: 100, duration: 0.4 } },
       },
     });
-
-    function toggleDarkMode() {
-      const body = document.body;
-      const isDarkMode = body.style.backgroundColor === "rgb(18, 18, 18)" || !body.style.backgroundColor;
-      if (isDarkMode) {
-        document.documentElement.style.setProperty('--main-bg', '#ffffff');
-        document.documentElement.style.setProperty('--accent-color', '#1a237e');
-        document.documentElement.style.setProperty('--dark-mode-bg', '#ffffff');
-        document.documentElement.style.setProperty('--dark-mode-text', '#1a237e');
-      } else {
-        document.documentElement.style.setProperty('--main-bg', '#1a237e');
-        document.documentElement.style.setProperty('--accent-color', '#ffd700');
-        document.documentElement.style.setProperty('--dark-mode-bg', '#121212');
-        document.documentElement.style.setProperty('--dark-mode-text', '#ffffff');
-      }
-      localStorage.setItem('darkMode', !isDarkMode);
-      body.style.backgroundColor = isDarkMode ? '#ffffff' : '#121212';
-    }
-
-    // Load dark mode preference
-    window.onload = () => {
-      const darkMode = localStorage.getItem('darkMode') === 'true';
-      if (darkMode) toggleDarkMode();
-    };
   </script>
 </body>
 </html>
