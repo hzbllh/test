@@ -1,233 +1,264 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Kedai H - Pricelist Games</title>
-    <!-- Google Fonts untuk font moden -->
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
-    <!-- FontAwesome untuk ikon -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
-    <style>
-        body {
-            font-family: 'Poppins', Arial, sans-serif;
-            background: linear-gradient(135deg, #0a1a2e, #1e2a44, #ffd70022);
-            color: #fff;
-            margin: 0;
-            padding: 0;
-            text-align: center;
-            min-height: 100vh;
-        }
-
-        /* Gaya Header */
-        .header-section {
-            padding: 60px 20px;
-            border-bottom: 3px solid #ffd700;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
-        }
-
-        .header-section .logo {
-            max-width: 120px;
-            height: auto;
-            margin: 0 auto;
-            animation: pulse 2s infinite;
-            transition: transform 0.3s;
-        }
-
-        .header-section .logo:hover {
-            transform: scale(1.1);
-        }
-
-        .header-section h1 {
-            font-size: 2.8em;
-            margin: 15px 0;
-            color: #fff;
-            text-shadow: 2px 2px 6px rgba(0, 0, 0, 0.5);
-            font-weight: 600;
-        }
-
-        /* Gaya Butang Pilihan Permainan */
-        .game-options {
-            margin: 40px 0;
-            display: flex;
-            justify-content: center;
-            flex-wrap: wrap;
-            gap: 15px;
-        }
-
-        .game-options a {
-            display: flex;
-            align-items: center;
-            background: #1e2a44;
-            color: #fff;
-            padding: 12px 20px;
-            border-radius: 8px;
-            text-decoration: none;
-            font-size: 1.1em;
-            border: 2px solid #ffd700;
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-            transition: all 0.3s ease;
-            opacity: 0;
-            animation: fadeInUp 0.5s forwards;
-        }
-
-        .game-options a:nth-child(1) { animation-delay: 0.1s; }
-        .game-options a:nth-child(2) { animation-delay: 0.2s; }
-        .game-options a:nth-child(3) { animation-delay: 0.3s; }
-        .game-options a:nth-child(4) { animation-delay: 0.4s; }
-        .game-options a:nth-child(5) { animation-delay: 0.5s; }
-
-        .game-options a:hover {
-            background: #2a3b5a;
-            transform: translateY(-3px);
-            box-shadow: 0 4px 8px rgba(255, 215, 0, 0.3);
-        }
-
-        .game-options img {
-            max-width: 25px;
-            height: auto;
-            margin-right: 10px;
-        }
-
-        .game-options i {
-            font-size: 20px;
-            margin-right: 10px;
-            color: #ffd700;
-        }
-
-        /* Gaya untuk Join Our Community */
-        .community {
-            margin: 40px 0;
-        }
-
-        .community h2 {
-            font-size: 2.2em;
-            color: #ffd700;
-            margin-bottom: 20px;
-            font-weight: 600;
-            text-transform: uppercase;
-        }
-
-        .community .social-icons {
-            display: flex;
-            justify-content: center;
-            gap: 20px;
-        }
-
-        .community a {
-            text-decoration: none;
-            font-size: 2.5em;
-            transition: transform 0.3s, color 0.3s;
-        }
-
-        .community i.whatsapp {
-            color: #25D366;
-        }
-
-        .community a:hover i.whatsapp {
-            color: #1ebe57;
-            transform: scale(1.2);
-        }
-
-        .community i.tiktok {
-            color: #69C9D0;
-        }
-
-        .community a:hover i.tiktok {
-            color: #EE1D52;
-            transform: scale(1.2);
-        }
-
-        /* Animasi */
-        @keyframes pulse {
-            0% { transform: scale(1); }
-            50% { transform: scale(1.05); }
-            100% { transform: scale(1); }
-        }
-
-        @keyframes fadeInUp {
-            from { opacity: 0; transform: translateY(20px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-
-        /* Media Query untuk Responsif */
-        @media (max-width: 600px) {
-            .header-section {
-                padding: 30px 10px;
-            }
-
-            .header-section .logo {
-                max-width: 80px;
-            }
-
-            .header-section h1 {
-                font-size: 1.8em;
-            }
-
-            .game-options a {
-                width: 80%;
-                margin: 10px auto;
-                font-size: 1em;
-                padding: 10px 15px;
-            }
-
-            .game-options img {
-                max-width: 20px;
-            }
-
-            .game-options i {
-                font-size: 18px;
-            }
-
-            .community h2 {
-                font-size: 1.5em;
-            }
-
-            .community a {
-                font-size: 2em;
-            }
-        }
-    </style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>META MATIK - Home</title>
+  <meta name="description" content="META MATIK: Your ultimate gaming tool for random number and direction generation">
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/particles.js@2.0.0/particles.min.js">
+  <style>
+    :root {
+      --main-bg: #1a237e;
+      --accent-color: #ffd700;
+      --dark-mode-bg: #121212;
+      --dark-mode-text: #ffffff;
+    }
+    body {
+      margin: 0;
+      padding: 0;
+      font-family: 'Poppins', sans-serif;
+      min-height: 100vh;
+      overflow-x: hidden;
+      transition: background-color 0.3s;
+    }
+    #particles-js {
+      position: fixed;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(135deg, #1a237e, #4a148c);
+      background-size: 200% 200%;
+      animation: gradientShift 10s ease infinite;
+    }
+    @keyframes gradientShift {
+      0% { background-position: 0% 0%; }
+      50% { background-position: 100% 100%; }
+      100% { background-position: 0% 0%; }
+    }
+    .nav {
+      position: sticky;
+      top: 0;
+      background: rgba(26, 35, 126, 0.9);
+      padding: 10px 20px;
+      display: flex;
+      justify-content: space-around;
+      align-items: center;
+      z-index: 10;
+    }
+    .nav .nav-item {
+      color: var(--accent-color);
+      text-decoration: none;
+      font-weight: bold;
+      padding: 10px;
+      transition: transform 0.3s, box-shadow 0.3s;
+    }
+    .nav .nav-item:hover {
+      transform: scale(1.1);
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+    }
+    .hero {
+      text-align: center;
+      padding: 80px 20px 40px;
+      position: relative;
+      z-index: 1;
+    }
+    .hero img {
+      max-width: 250px;
+      height: auto;
+      margin-bottom: 20px;
+      transition: transform 0.3s;
+    }
+    .hero img:hover {
+      transform: scale(1.05) rotate(5deg);
+    }
+    .hero h1 {
+      font-size: 3em;
+      margin: 0;
+      color: var(--accent-color);
+      text-shadow: 3px 3px 6px rgba(0, 0, 0, 0.5);
+      animation: fadeInUp 1s ease-out;
+    }
+    .game-cards {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 20px;
+      padding: 20px;
+      max-width: 1000px;
+      margin: 0 auto;
+    }
+    .card {
+      background: rgba(255, 255, 255, 0.1);
+      border-radius: 10px;
+      padding: 20px;
+      text-align: center;
+      transition: transform 0.3s, box-shadow 0.3s;
+      cursor: pointer;
+    }
+    .card:hover {
+      transform: translateY(-10px);
+      box-shadow: 0 10px 20px rgba(0, 0, 0, 0.3);
+    }
+    .card img {
+      max-width: 100px;
+      height: auto;
+      margin-bottom: 10px;
+    }
+    .card h3 {
+      font-size: 1.2em;
+      color: var(--accent-color);
+      margin: 10px 0;
+      text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.3);
+    }
+    .card a {
+      text-decoration: none;
+      color: var(--accent-color);
+      font-weight: bold;
+      padding: 10px 20px;
+      background: rgba(255, 215, 0, 0.8);
+      border-radius: 5px;
+      transition: background 0.3s;
+    }
+    .card a:hover {
+      background: #ffca28;
+    }
+    #footer {
+      margin-top: auto;
+      padding: 20px;
+      text-align: center;
+      color: var(--accent-color);
+      text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.3);
+      animation: fadeIn 1s ease-out 1s forwards;
+    }
+    .social-links {
+      margin-top: 10px;
+      display: flex;
+      gap: 15px;
+      justify-content: center;
+    }
+    .social-links img {
+      width: 24px;
+      height: 24px;
+      transition: transform 0.3s;
+    }
+    .social-links img:hover {
+      transform: rotate(360deg) scale(1.2);
+    }
+    .dark-mode-toggle {
+      position: fixed;
+      top: 10px;
+      right: 10px;
+      background: var(--accent-color);
+      color: var(--main-bg);
+      border: none;
+      padding: 10px;
+      border-radius: 5px;
+      cursor: pointer;
+      z-index: 20;
+      transition: background 0.3s;
+    }
+    .dark-mode-toggle:hover {
+      background: #ffca28;
+    }
+    @keyframes fadeIn {
+      from { opacity: 0; }
+      to { opacity: 1; }
+    }
+    @keyframes fadeInUp {
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    @media (max-width: 600px) {
+      .nav { flex-direction: column; gap: 10px; }
+      .hero img { max-width: 150px; }
+      .hero h1 { font-size: 1.8em; }
+      .game-cards { grid-template-columns: 1fr; }
+      #footer { font-size: 0.8em; }
+      .social-links img { width: 20px; height: 20px; }
+    }
+  </style>
 </head>
 <body>
-    <section class="header-section">
-        <img src="https://raw.githubusercontent.com/hzbllh/games/5d830487edd8f40dc38d6fefcfa2b211eb12f3ee/H_20250228_033418_0002.png" alt="Kedai H Logo" class="logo">
-        <h1>Kedai H - Pricelist Games</h1>
-    </section>
-    
-    <section class="game-options">
-        <a href="mlbb.html">
-            <img src="https://raw.githubusercontent.com/hzbllh/games/80feffb50d134cafadad745f71af5d7e2f1354b7/unnamed.jpg" alt="Mobile Legends Icon">
-            Mobile Legends
-        </a>
-        <a href="pubg.html">
-            <img src="https://raw.githubusercontent.com/hzbllh/games/cbc27b2820a2e606d2d052ee4cbfd35228232a05/unnamed.webp" alt="PUBG Icon">
-            PUBG
-        </a>
-        <a href="valorant.html">
-            <img src="https://raw.githubusercontent.com/hzbllh/games/cbc27b2820a2e606d2d052ee4cbfd35228232a05/1WQY5YfS_400x400.jpg" alt="Valorant Icon">
-            Valorant
-        </a>
-        <a href="genshin.html">
-            <img src="https://github.com/hzbllh/games/blob/cfea4671a7c46227344e8fa67ebdce5ebf9944c3/unnamed%20(1).webp?raw=true" alt="Genshin Impact Icon">
-            Genshin Impact
-        </a>
-        <a href="winrate.html">
-            <i class="fas fa-calculator"></i>
-            Winrate Calculator
-        </a>
-    </section>
+  <div id="particles-js"></div>
+  <button class="dark-mode-toggle" onclick="toggleDarkMode()">Toggle Dark Mode</button>
+  <nav class="nav">
+    <a href="generator.html" class="nav-item">Meta Matik</a>
+    <a href="ranking.html" class="nav-item">Ranking</a>
+    <a href="tetris.html" class="nav-item">Tetris</a>
+    <a href="snake.html" class="nav-item">Snake</a>
+  </nav>
+  <section class="hero">
+    <img src="https://raw.githubusercontent.com/hzbllh/bagi-meta/2f3691f71735efe80b4212706475c1c133afa2b2/IMG-20250302-WA0002-removebg-preview.png" alt="ChiiDy Logo" loading="lazy">
+    <h1>ChiiDy sdn. bhd.</h1>
+  </section>
+  <div class="game-cards">
+    <div class="card">
+      <img src="https://via.placeholder.com/100?text=Meta+Matik" alt="Meta Matik">
+      <h3>Meta Matik</h3>
+      <a href="generator.html">Main Sekarang</a>
+    </div>
+    <div class="card">
+      <img src="https://via.placeholder.com/100?text=Ranking" alt="Ranking">
+      <h3>Ranking</h3>
+      <a href="ranking.html">Main Sekarang</a>
+    </div>
+    <div class="card">
+      <img src="https://via.placeholder.com/100?text=Tetris" alt="Tetris">
+      <h3>Tetris</h3>
+      <a href="tetris.html">Main Sekarang</a>
+    </div>
+    <div class="card">
+      <img src="https://via.placeholder.com/100?text=Snake" alt="Snake">
+      <h3>Snake</h3>
+      <a href="snake.html">Main Sekarang</a>
+    </div>
+  </div>
+  <div id="footer">
+    SEMOGA NISMA NISMA
+    <div class="social-links">
+      <a href="https://www.tiktok.com/@kc._.collecti0n?_t=ZS-8w5A2jjiboI&_r=1" target="_blank"><img src="https://cdn-icons-png.flaticon.com/512/3046/3046121.png" alt="TikTok"></a>
+    </div>
+  </div>
 
-    <section class="community">
-        <h2>Join Our Community</h2>
-        <div class="social-icons">
-            <a href="https://chat.whatsapp.com/IYzrlrjtP1L2jikkTdiSBX">
-                <i class="fab fa-whatsapp whatsapp"></i>
-            </a>
-            <a href="https://www.tiktok.com/@kedai.h1?_t=ZS-8wNVae7rV5M&_r=1">
-                <i class="fab fa-tiktok tiktok"></i>
-            </a>
-        </div>
-    </section>
+  <script src="https://cdn.jsdelivr.net/npm/particles.js@2.0.0/particles.min.js"></script>
+  <script>
+    particlesJS({
+      particles: {
+        number: { value: 50, density: { enable: true, value_area: 800 } },
+        color: { value: "#ffd700" },
+        shape: { type: "circle" },
+        opacity: { value: 0.5, random: true },
+        size: { value: 3, random: true },
+        move: { enable: true, speed: 2, direction: "none", random: true },
+      },
+      interactivity: {
+        events: { onhover: { enable: true, mode: "repulse" } },
+        modes: { repulse: { distance: 100, duration: 0.4 } },
+      },
+    });
+
+    function toggleDarkMode() {
+      const body = document.body;
+      const isDarkMode = body.style.backgroundColor === "rgb(18, 18, 18)" || !body.style.backgroundColor;
+      if (isDarkMode) {
+        document.documentElement.style.setProperty('--main-bg', '#ffffff');
+        document.documentElement.style.setProperty('--accent-color', '#1a237e');
+        document.documentElement.style.setProperty('--dark-mode-bg', '#ffffff');
+        document.documentElement.style.setProperty('--dark-mode-text', '#1a237e');
+      } else {
+        document.documentElement.style.setProperty('--main-bg', '#1a237e');
+        document.documentElement.style.setProperty('--accent-color', '#ffd700');
+        document.documentElement.style.setProperty('--dark-mode-bg', '#121212');
+        document.documentElement.style.setProperty('--dark-mode-text', '#ffffff');
+      }
+      localStorage.setItem('darkMode', !isDarkMode);
+      body.style.backgroundColor = isDarkMode ? '#ffffff' : '#121212';
+    }
+
+    // Load dark mode preference
+    window.onload = () => {
+      const darkMode = localStorage.getItem('darkMode') === 'true';
+      if (darkMode) toggleDarkMode();
+    };
+  </script>
 </body>
 </html>
