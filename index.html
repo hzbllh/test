@@ -2,81 +2,128 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Roll Dice</title>
+    <title>Multi Dice Roll</title>
     <style>
-        .dice {
-            width: 100px;
-            height: 100px;
-            position: relative;
-            transform-style: preserve-3d;
-            transition: transform 1s;
-        }
-        .face {
-            position: absolute;
-            width: 100px;
-            height: 100px;
-            background: #fff;
-            border: 2px solid #000;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 40px;
-        }
-        /* Atur setiap muka dadu */
-        .front  { transform: translateZ(50px); }
-        .back   { transform: translateZ(-50px) rotateY(180deg); }
-        .right  { transform: translateX(50px) rotateY(90deg); }
-        .left   { transform: translateX(-50px) rotateY(-90deg); }
-        .top    { transform: translateY(-50px) rotateX(90deg); }
-        .bottom { transform: translateY(50px) rotateX(-90deg); }
-        /* Animasi pusing */
-        .roll {
-            animation: rollDice 1s linear;
-        }
-        @keyframes rollDice {
-            0% { transform: rotateX(0deg) rotateY(0deg); }
-            100% { transform: rotateX(360deg) rotateY(360deg); }
-        }
+        body { margin: 0; }
+        canvas { display: block; }
+        .controls { position: absolute; top: 10px; left: 10px; }
+        #result { position: absolute; top: 50px; left: 10px; font-size: 20px; }
     </style>
 </head>
 <body>
-    <div class="dice" id="dice">
-        <div class="face front">1</div>
-        <div class="face back">2</div>
-        <div class="face right">3</div>
-        <div class="face left">4</div>
-        <div class="face top">5</div>
-        <div class="face bottom">6</div>
+    <div class="controls">
+        <label for="diceCount">Number of Dice (1-10): </label>
+        <input type="number" id="diceCount" min="1" max="10" value="1">
+        <button onclick="rollDice()">Roll Dice</button>
     </div>
-    <button onclick="rollDice()">Roll Dice</button>
-    <p>Result: <span id="result"></span></p>
-
+    <div id="result">Result: -</div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r134/three.min.js"></script>
     <script>
-        function rollDice() {
-            const dice = document.getElementById('dice');
-            const result = document.getElementById('result');
-            // Random nombor 1-6
-            const number = Math.floor(Math.random() * 6) + 1;
-            // Tambah animasi pusing
-            dice.classList.add('roll');
-            // Set muka dadu berdasarkan nombor
-            setTimeout(() => {
-                dice.style.transform = getTransform(number);
-                result.textContent = number;
-                dice.classList.remove('roll');
-            }, 1000);
+        // Setup Three.js
+        const scene = new THREE.Scene();
+        const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+        const renderer = new THREE.WebGLRenderer();
+        renderer.setSize(window.innerWidth, window.innerHeight);
+        document.body.appendChild(renderer.domElement);
+
+        // Pencahayaan
+        const light = new THREE.DirectionalLight(0xffffff, 0.8);
+        light.position.set(1, 1, 1);
+        scene.add(light);
+        scene.add(new THREE.AmbientLight(0x404040));
+
+        // Simpan semua dadu
+        let diceArray = [];
+        const diceSize = 1;
+        const spacing = 1.5; // Jarak antara dadu
+
+        // Fungsi buat dadu
+        function createDice(xPos) {
+            const geometry = new THREE.BoxGeometry(diceSize, diceSize, diceSize);
+            const materials = [
+                new THREE.MeshStandardMaterial({ color: 0xffffff }), // Muka 1
+                new THREE.MeshStandardMaterial({ color: 0xffffff }), // Muka 2
+                new THREE.MeshStandardMaterial({ color: 0xffffff }), // Muka 3
+                new THREE.MeshStandardMaterial({ color: 0xffffff }), // Muka 4
+                new THREE.MeshStandardMaterial({ color: 0xffffff }), // Muka 5
+                new THREE.MeshStandardMaterial({ color: 0xffffff })  // Muka 6
+            ];
+            const dice = new THREE.Mesh(geometry, materials);
+            dice.position.x = xPos; // Susun dadu secara mendatar
+            scene.add(dice);
+            return dice;
         }
 
-        function getTransform(number) {
-            switch(number) {
-                case 1: return 'rotateX(0deg) rotateY(0deg)';
-                case 2: return 'rotateX(0deg) rotateY(180deg)';
-                case 3: return 'rotateX(0deg) rotateY(-90deg)';
-                case 4: return 'rotateX(0deg) rotateY(90deg)';
-                case 5: return 'rotateX(-90deg) rotateY(0deg)';
-                case 6: return 'rotateX(90deg) rotateY(0deg)';
+        // Fungsi setup dadu berdasarkan bilangan
+        function setupDice(count) {
+            // Buang dadu lama
+            diceArray.forEach(dice => scene.remove(dice));
+            diceArray = [];
+            // Buat dadu baru
+            for (let i = 0; i < count; i++) {
+                const xPos = (i - (count - 1) / 2) * spacing; // Susun dadu tengah
+                diceArray.push(createDice(xPos));
             }
+            // Adjust camera untuk muat semua dadu
+            camera.position.z = Math.max(3, count * 1.5);
         }
+
+        // Animasi roll dadu
+        let isRolling = false;
+        function rollDice() {
+            if (isRolling) return;
+            isRolling = true;
+            const diceCount = Math.min(Math.max(parseInt(document.getElementById('diceCount').value), 1), 10);
+            setupDice(diceCount);
+            const resultDiv = document.getElementById('result');
+            const results = [];
+
+            // Animasi setiap dadu
+            let rollTime = 0;
+            const rollDuration = 2; // Durasi pusing (saat)
+            const rollInterval = setInterval(() => {
+                diceArray.forEach(dice => {
+                    dice.rotation.x += Math.random() * 0.5;
+                    dice.rotation.y += Math.random() * 0.5;
+                });
+                rollTime += 1 / 60;
+                if (rollTime >= rollDuration) {
+                    clearInterval(rollInterval);
+                    // Set muka dadu dan kira result
+                    diceArray.forEach((dice, index) => {
+                        const number = Math.floor(Math.random() * 6) + 1;
+                        results.push(number);
+                        switch (number) {
+                            case 1: dice.rotation.set(0, 0, 0); break;
+                            case 2: dice.rotation.set(0, Math.PI, 0); break;
+                            case 3: dice.rotation.set(0, -Math.PI / 2, 0); break;
+                            case 4: dice.rotation.set(0, Math.PI / 2, 0); break;
+                            case 5: dice.rotation.set(-Math.PI / 2, 0, 0); break;
+                            case 6: dice.rotation.set(Math.PI / 2, 0, 0); break;
+                        }
+                    });
+                    resultDiv.textContent = `Result: ${results.join(', ')}`;
+                    isRolling = false;
+                }
+            }, 1000 / 60);
+        }
+
+        // Render loop
+        function animate() {
+            requestAnimationFrame(animate);
+            renderer.render(scene, camera);
+        }
+        animate();
+
+        // Resize window
+        window.addEventListener('resize', () => {
+            camera.aspect = window.innerWidth / window.innerHeight;
+            camera.updateProjectionMatrix();
+            renderer.setSize(window.innerWidth, window.innerHeight);
+        });
+
+        // Setup satu dadu pada mulanya
+        setupDice(1);
     </script>
 </body>
 </html>
