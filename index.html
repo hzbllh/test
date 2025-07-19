@@ -1,129 +1,271 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ms">
 <head>
     <meta charset="UTF-8">
-    <title>Multi Dice Roll</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kedai H - Harga Permainan Terkini</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://cdnjs.cloudflare.com">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
-        body { margin: 0; }
-        canvas { display: block; }
-        .controls { position: absolute; top: 10px; left: 10px; }
-        #result { position: absolute; top: 50px; left: 10px; font-size: 20px; }
+        :root {
+            --primary: #0a1a2e;
+            --secondary: #1e2a44;
+            --accent: #ffd700;
+            --text: #ffffff;
+            --text-secondary: #d1d5db;
+            --hover: #2a3b5a;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: linear-gradient(135deg, var(--primary), var(--secondary), #ffd70022);
+            color: var(--text);
+            min-height: 100vh;
+            line-height: 1.6;
+        }
+        
+        /* Header Styles */
+        header {
+            padding: 2rem 1rem;
+            text-align: center;
+            border-bottom: 3px solid var(--accent);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+            background: rgba(10, 26, 46, 0.8);
+        }
+        
+        .logo {
+            width: 120px;
+            height: auto;
+            margin: 0 auto;
+            animation: pulse 2s infinite ease-in-out;
+            transition: transform 0.3s;
+            will-change: transform;
+        }
+        
+        .logo:hover {
+            transform: scale(1.1);
+        }
+        
+        h1 {
+            font-size: clamp(1.8rem, 4vw, 2.8rem);
+            margin: 1rem 0;
+            color: var(--accent);
+            text-shadow: 2px 2px 6px rgba(0, 0, 0, 0.5);
+            font-weight: 600;
+        }
+        
+        .subtitle {
+            font-size: clamp(1rem, 2vw, 1.2rem);
+            color: var(--text-secondary);
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        
+        /* Main Content */
+        main {
+            padding: 2rem 1rem;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        
+        .game-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
+            margin: 2rem 0;
+        }
+        
+        .game-card {
+            display: flex;
+            align-items: center;
+            background: var(--secondary);
+            color: var(--text);
+            padding: 1.2rem;
+            border-radius: 10px;
+            text-decoration: none;
+            font-size: 1.1rem;
+            border: 2px solid var(--accent);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            transition: all 0.3s ease;
+            opacity: 0;
+            animation: fadeInUp 0.5s forwards;
+            will-change: transform, opacity;
+        }
+        
+        .game-card:nth-child(1) { animation-delay: 0.1s; }
+        .game-card:nth-child(2) { animation-delay: 0.2s; }
+        .game-card:nth-child(3) { animation-delay: 0.3s; }
+        .game-card:nth-child(4) { animation-delay: 0.4s; }
+        .game-card:nth-child(5) { animation-delay: 0.5s; }
+        
+        .game-card:hover {
+            background: var(--hover);
+            transform: translateY(-5px);
+            box-shadow: 0 8px 16px rgba(255, 215, 0, 0.3);
+        }
+        
+        .game-icon {
+            width: 30px;
+            height: 30px;
+            object-fit: contain;
+            margin-right: 12px;
+        }
+        
+        /* Community Section */
+        .community {
+            text-align: center;
+            margin: 3rem 0;
+            padding: 2rem 1rem;
+            background: rgba(30, 42, 68, 0.6);
+            border-radius: 10px;
+        }
+        
+        .community h2 {
+            font-size: clamp(1.5rem, 3vw, 2.2rem);
+            color: var(--accent);
+            margin-bottom: 1.5rem;
+            font-weight: 600;
+            text-transform: uppercase;
+        }
+        
+        .social-links {
+            display: flex;
+            justify-content: center;
+            gap: 2rem;
+            flex-wrap: wrap;
+        }
+        
+        .social-link {
+            font-size: 2.5rem;
+            transition: transform 0.3s;
+            will-change: transform;
+        }
+        
+        .social-link:hover {
+            transform: scale(1.2);
+        }
+        
+        .whatsapp { color: #25D366; }
+        .tiktok { color: #69C9D0; }
+        
+        .social-link:hover .whatsapp { color: #1ebe57; }
+        .social-link:hover .tiktok { color: #EE1D52; }
+        
+        /* Animations */
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+            100% { transform: scale(1); }
+        }
+        
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        /* Footer */
+        footer {
+            text-align: center;
+            padding: 1.5rem;
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+            border-top: 1px solid rgba(255, 215, 0, 0.2);
+        }
+        
+        /* Responsive Adjustments */
+        @media (max-width: 768px) {
+            .game-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .game-card {
+                font-size: 1rem;
+                padding: 1rem;
+            }
+            
+            .social-links {
+                gap: 1.5rem;
+            }
+            
+            .social-link {
+                font-size: 2rem;
+            }
+        }
     </style>
 </head>
 <body>
-    <div class="controls">
-        <label for="diceCount">Number of Dice (1-10): </label>
-        <input type="number" id="diceCount" min="1" max="10" value="1">
-        <button onclick="rollDice()">Roll Dice</button>
-    </div>
-    <div id="result">Result: -</div>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r134/three.min.js"></script>
-    <script>
-        // Setup Three.js
-        const scene = new THREE.Scene();
-        const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
-        const renderer = new THREE.WebGLRenderer();
-        renderer.setSize(window.innerWidth, window.innerHeight);
-        document.body.appendChild(renderer.domElement);
-
-        // Pencahayaan
-        const light = new THREE.DirectionalLight(0xffffff, 0.8);
-        light.position.set(1, 1, 1);
-        scene.add(light);
-        scene.add(new THREE.AmbientLight(0x404040));
-
-        // Simpan semua dadu
-        let diceArray = [];
-        const diceSize = 1;
-        const spacing = 1.5; // Jarak antara dadu
-
-        // Fungsi buat dadu
-        function createDice(xPos) {
-            const geometry = new THREE.BoxGeometry(diceSize, diceSize, diceSize);
-            const materials = [
-                new THREE.MeshStandardMaterial({ color: 0xffffff }), // Muka 1
-                new THREE.MeshStandardMaterial({ color: 0xffffff }), // Muka 2
-                new THREE.MeshStandardMaterial({ color: 0xffffff }), // Muka 3
-                new THREE.MeshStandardMaterial({ color: 0xffffff }), // Muka 4
-                new THREE.MeshStandardMaterial({ color: 0xffffff }), // Muka 5
-                new THREE.MeshStandardMaterial({ color: 0xffffff })  // Muka 6
-            ];
-            const dice = new THREE.Mesh(geometry, materials);
-            dice.position.x = xPos; // Susun dadu secara mendatar
-            scene.add(dice);
-            return dice;
-        }
-
-        // Fungsi setup dadu berdasarkan bilangan
-        function setupDice(count) {
-            // Buang dadu lama
-            diceArray.forEach(dice => scene.remove(dice));
-            diceArray = [];
-            // Buat dadu baru
-            for (let i = 0; i < count; i++) {
-                const xPos = (i - (count - 1) / 2) * spacing; // Susun dadu tengah
-                diceArray.push(createDice(xPos));
-            }
-            // Adjust camera untuk muat semua dadu
-            camera.position.z = Math.max(3, count * 1.5);
-        }
-
-        // Animasi roll dadu
-        let isRolling = false;
-        function rollDice() {
-            if (isRolling) return;
-            isRolling = true;
-            const diceCount = Math.min(Math.max(parseInt(document.getElementById('diceCount').value), 1), 10);
-            setupDice(diceCount);
-            const resultDiv = document.getElementById('result');
-            const results = [];
-
-            // Animasi setiap dadu
-            let rollTime = 0;
-            const rollDuration = 2; // Durasi pusing (saat)
-            const rollInterval = setInterval(() => {
-                diceArray.forEach(dice => {
-                    dice.rotation.x += Math.random() * 0.5;
-                    dice.rotation.y += Math.random() * 0.5;
-                });
-                rollTime += 1 / 60;
-                if (rollTime >= rollDuration) {
-                    clearInterval(rollInterval);
-                    // Set muka dadu dan kira result
-                    diceArray.forEach((dice, index) => {
-                        const number = Math.floor(Math.random() * 6) + 1;
-                        results.push(number);
-                        switch (number) {
-                            case 1: dice.rotation.set(0, 0, 0); break;
-                            case 2: dice.rotation.set(0, Math.PI, 0); break;
-                            case 3: dice.rotation.set(0, -Math.PI / 2, 0); break;
-                            case 4: dice.rotation.set(0, Math.PI / 2, 0); break;
-                            case 5: dice.rotation.set(-Math.PI / 2, 0, 0); break;
-                            case 6: dice.rotation.set(Math.PI / 2, 0, 0); break;
-                        }
-                    });
-                    resultDiv.textContent = `Result: ${results.join(', ')}`;
-                    isRolling = false;
-                }
-            }, 1000 / 60);
-        }
-
-        // Render loop
-        function animate() {
-            requestAnimationFrame(animate);
-            renderer.render(scene, camera);
-        }
-        animate();
-
-        // Resize window
-        window.addEventListener('resize', () => {
-            camera.aspect = window.innerWidth / window.innerHeight;
-            camera.updateProjectionMatrix();
-            renderer.setSize(window.innerWidth, window.innerHeight);
-        });
-
-        // Setup satu dadu pada mulanya
-        setupDice(1);
-    </script>
+    <header>
+        <img src="https://raw.githubusercontent.com/hzbllh/games/5d830487edd8f40dc38d6fefcfa2b211eb12f3ee/H_20250228_033418_0002.png" 
+             alt="Logo Kedai H" 
+             class="logo"
+             loading="lazy">
+        <h1>Kedai H - Harga Permainan</h1>
+        <p class="subtitle">Permainan terkini dengan harga terbaik di Malaysia</p>
+    </header>
+    
+    <main>
+        <div class="game-grid">
+            <a href="mlbb.html" class="game-card">
+                <img src="https://raw.githubusercontent.com/hzbllh/games/80feffb50d134cafadad745f71af5d7e2f1354b7/unnamed.jpg" 
+                     alt="Mobile Legends" 
+                     class="game-icon"
+                     loading="lazy">
+                Mobile Legends
+            </a>
+            
+            <a href="pubg.html" class="game-card">
+                <img src="https://raw.githubusercontent.com/hzbllh/games/cbc27b2820a2e606d2d052ee4cbfd35228232a05/unnamed.webp" 
+                     alt="PUBG Mobile" 
+                     class="game-icon"
+                     loading="lazy">
+                PUBG Mobile
+            </a>
+            
+            <a href="valorant.html" class="game-card">
+                <img src="https://raw.githubusercontent.com/hzbllh/games/cbc27b2820a2e606d2d052ee4cbfd35228232a05/1WQY5YfS_400x400.jpg" 
+                     alt="Valorant" 
+                     class="game-icon"
+                     loading="lazy">
+                Valorant
+            </a>
+            
+            <a href="genshin.html" class="game-card">
+                <img src="https://raw.githubusercontent.com/hzbllh/games/cfea4671a7c46227344e8fa67ebdce5ebf9944c3/unnamed%20(1).webp" 
+                     alt="Genshin Impact" 
+                     class="game-icon"
+                     loading="lazy">
+                Genshin Impact
+            </a>
+            
+            <a href="winrate.html" class="game-card">
+                <i class="fas fa-calculator game-icon"></i>
+                Kalkulator Winrate
+            </a>
+        </div>
+        
+        <section class="community">
+            <h2>Join Komuniti Kami</h2>
+            <div class="social-links">
+                <a href="https://chat.whatsapp.com/IYzrlrjtP1L2jikkTdiSBX" class="social-link">
+                    <i class="fab fa-whatsapp whatsapp"></i>
+                </a>
+                <a href="https://www.tiktok.com/@kedai.h1?_t=ZS-8wNVae7rV5M&_r=1" class="social-link">
+                    <i class="fab fa-tiktok tiktok"></i>
+                </a>
+            </div>
+        </section>
+    </main>
+    
+    <footer>
+        <p>&copy; 2023 Kedai H. Hak Cipta Terpelihara.</p>
+    </footer>
 </body>
 </html>
