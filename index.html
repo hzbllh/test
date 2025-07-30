@@ -3,15 +3,43 @@
 <head>
     <title>De Nyanya Cashier</title>
     <style>
-        body { font-family: Arial; text-align: center; }
-        .item { margin: 10px; }
-        button { padding: 10px; margin: 5px; }
-        table { margin: 20px auto; border-collapse: collapse; }
-        th, td { border: 1px solid #ddd; padding: 8px; }
+        body {
+            font-family: Arial;
+            background-color: #000000;
+            color: #FFFFFF;
+            text-align: center;
+            margin: 0;
+            padding: 20px;
+        }
+        h2 { font-size: 2em; text-decoration: underline; }
+        h3 { font-size: 1.5em; margin: 15px 0; }
+        .item { margin: 10px; display: flex; justify-content: center; align-items: center; }
+        label { margin-right: 10px; }
+        input[type="number"] { padding: 5px; width: 60px; }
+        button {
+            padding: 10px 20px;
+            background-color: #FFFFFF;
+            color: #000000;
+            border: none;
+            cursor: pointer;
+        }
+        button:hover { background-color: #CCCCCC; }
+        table {
+            margin: 20px auto;
+            border-collapse: collapse;
+            background-color: #333333;
+        }
+        th, td {
+            border: 1px solid #FFFFFF;
+            padding: 8px;
+            color: #FFFFFF;
+        }
+        .coffee-icon { width: 30px; vertical-align: middle; margin-right: 10px; }
     </style>
 </head>
 <body>
-    <h2>De Nyanya Cashier System</h2>
+    <h2>De Nyanya Cashier</h2>
+    <img src="https://via.placeholder.com/50" alt="Coffee Icon" class="coffee-icon">
     <h3>Minuman</h3>
     <div class="item">
         <label>Blue Lemon (RM 5): </label>
@@ -32,34 +60,6 @@
     <div class="item">
         <label>F&N Oren (RM 1): </label>
         <input type="number" id="fnOren" min="0" value="0">
-    </div>
-    <div class="item">
-        <label>F&N Soda (RM 1): </label>
-        <input type="number" id="fnSoda" min="0" value="0">
-    </div>
-    <div class="item">
-        <label>F&N Fruity (RM 1): </label>
-        <input type="number" id="fnFruity" min="0" value="0">
-    </div>
-    <div class="item">
-        <label>F&N Strawberry (RM 1): </label>
-        <input type="number" id="fnStrawberry" min="0" value="0">
-    </div>
-    <div class="item">
-        <label>Pepsi (RM 1): </label>
-        <input type="number" id="pepsi" min="0" value="0">
-    </div>
-    <div class="item">
-        <label>A&W (RM 1): </label>
-        <input type="number" id="aw" min="0" value="0">
-    </div>
-    <div class="item">
-        <label>Cola (RM 1): </label>
-        <input type="number" id="cola" min="0" value="0">
-    </div>
-    <div class="item">
-        <label>Cola Zero (RM 1): </label>
-        <input type="number" id="colaZero" min="0" value="0">
     </div>
     <div class="item">
         <label>Susu Berisi (RM 3): </label>
@@ -101,13 +101,6 @@
             total += document.getElementById("blackcurrant").value * 5;
             total += document.getElementById("bobaMilktea").value * 5;
             total += document.getElementById("fnOren").value * 1;
-            total += document.getElementById("fnSoda").value * 1;
-            total += document.getElementById("fnFruity").value * 1;
-            total += document.getElementById("fnStrawberry").value * 1;
-            total += document.getElementById("pepsi").value * 1;
-            total += document.getElementById("aw").value * 1;
-            total += document.getElementById("cola").value * 1;
-            total += document.getElementById("colaZero").value * 1;
             total += document.getElementById("susuBerisi").value * 3;
             total += document.getElementById("popis").value * 1.50;
             total += document.getElementById("rotiSosij").value * 1;
@@ -124,7 +117,7 @@
             }
             orderCount++;
             let items = [];
-            for (let id of ["blueLemon", "apple", "blackcurrant", "bobaMilktea", "fnOren", "fnSoda", "fnFruity", "fnStrawberry", "pepsi", "aw", "cola", "colaZero", "susuBerisi", "popis", "rotiSosij", "donut"]) {
+            for (let id of ["blueLemon", "apple", "blackcurrant", "bobaMilktea", "fnOren", "susuBerisi", "popis", "rotiSosij", "donut"]) {
                 let qty = document.getElementById(id).value;
                 if (qty > 0) {
                     let name = document.getElementById(id).previousElementSibling.textContent.replace(": ", "").replace(" (RM *)", "");
