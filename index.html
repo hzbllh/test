@@ -65,6 +65,7 @@
     </div>
     <div id="currentOrder">Order Semasa: <span id="currentItems"></span> | Jumlah: RM <span id="total">0</span></div>
     <button onclick="addOrder()">Sahkan Order</button>
+    <button onclick="exportToGoogleSheets()">Eksport ke Google Sheets</button>
 
     <h3>Senarai Order</h3>
     <table id="orderTable">
@@ -130,6 +131,23 @@
                 row.insertCell(1).innerText = order.items;
                 row.insertCell(2).innerText = order.total.toFixed(2);
             });
+        }
+
+        function exportToGoogleSheets() {
+            if (orders.length === 0) {
+                alert("Tiada order untuk dieksport!");
+                return;
+            }
+            let csvContent = "Order #,Item & Jumlah,Total (RM)\n" + 
+                orders.map(order => `${order.id},${order.items},${order.total.toFixed(2)}`).join("\n");
+            let spreadsheetId = "YOUR_SPREADSHEET_ID_HERE"; // Ganti dengan ID Spreadsheet awak
+            let sheetName = "Orders"; // Nama sheet dalam Google Sheets
+            let url = `https://script.google.com/macros/s/YOUR_SCRIPT_ID_HERE/exec?spreadsheetId=${spreadsheetId}&sheetName=${sheetName}&data=${encodeURIComponent(csvContent)}`;
+
+            fetch(url)
+                .then(response => response.text())
+                .then(data => alert("Data dieksport ke Google Sheets: " + data))
+                .catch(error => alert("Ralat semasa eksport: " + error));
         }
     </script>
 </body>
