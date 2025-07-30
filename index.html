@@ -13,15 +13,15 @@
         }
         h2 { font-size: 2em; text-decoration: underline; }
         h3 { font-size: 1.5em; margin: 15px 0; }
-        .item { margin: 10px; display: flex; justify-content: center; align-items: center; }
-        label { margin-right: 10px; }
-        input[type="number"] { padding: 5px; width: 60px; }
+        .button-group { margin: 10px; }
         button {
             padding: 10px 20px;
+            margin: 5px;
             background-color: #FFFFFF;
             color: #000000;
             border: none;
             cursor: pointer;
+            transition: background-color 0.3s;
         }
         button:hover { background-color: #CCCCCC; }
         table {
@@ -35,51 +35,36 @@
             color: #FFFFFF;
         }
         .coffee-icon { width: 30px; vertical-align: middle; margin-right: 10px; }
+        #currentOrder { margin: 20px; font-size: 1.2em; }
     </style>
 </head>
 <body>
     <h2>De Nyanya Cashier</h2>
     <img src="https://via.placeholder.com/50" alt="Coffee Icon" class="coffee-icon">
     <h3>Minuman</h3>
-    <div class="item">
-        <label>Blue Lemon (RM 5): </label>
-        <input type="number" id="blueLemon" min="0" value="0">
-    </div>
-    <div class="item">
-        <label>Apple (RM 5): </label>
-        <input type="number" id="apple" min="0" value="0">
-    </div>
-    <div class="item">
-        <label>Blackcurrant (RM 5): </label>
-        <input type="number" id="blackcurrant" min="0" value="0">
-    </div>
-    <div class="item">
-        <label>Boba Milktea (RM 5): </label>
-        <input type="number" id="bobaMilktea" min="0" value="0">
-    </div>
-    <div class="item">
-        <label>F&N Oren (RM 1): </label>
-        <input type="number" id="fnOren" min="0" value="0">
-    </div>
-    <div class="item">
-        <label>Susu Berisi (RM 3): </label>
-        <input type="number" id="susuBerisi" min="0" value="0">
+    <div class="button-group">
+        <button onclick="addItem('Blue Lemon', 5)">Blue Lemon (RM 5)</button>
+        <button onclick="addItem('Apple', 5)">Apple (RM 5)</button>
+        <button onclick="addItem('Blackcurrant', 5)">Blackcurrant (RM 5)</button>
+        <button onclick="addItem('Boba Milktea', 5)">Boba Milktea (RM 5)</button>
+        <button onclick="addItem('F&N Oren', 1)">F&N Oren (RM 1)</button>
+        <button onclick="addItem('F&N Soda', 1)">F&N Soda (RM 1)</button>
+        <button onclick="addItem('F&N Fruity', 1)">F&N Fruity (RM 1)</button>
+        <button onclick="addItem('F&N Strawberry', 1)">F&N Strawberry (RM 1)</button>
+        <button onclick="addItem('Pepsi', 1)">Pepsi (RM 1)</button>
+        <button onclick="addItem('A&W', 1)">A&W (RM 1)</button>
+        <button onclick="addItem('Cola', 1)">Cola (RM 1)</button>
+        <button onclick="addItem('Cola Zero', 1)">Cola Zero (RM 1)</button>
+        <button onclick="addItem('Susu Berisi', 3)">Susu Berisi (RM 3)</button>
     </div>
     <h3>Lain-lain</h3>
-    <div class="item">
-        <label>Popis (2pcs RM 1.50): </label>
-        <input type="number" id="popis" min="0" value="0">
+    <div class="button-group">
+        <button onclick="addItem('Popis', 1.50)">Popis (RM 1.50)</button>
+        <button onclick="addItem('Roti Sosij', 1)">Roti Sosij (RM 1)</button>
+        <button onclick="addItem('Donut', 0.60)">Donut (RM 0.60)</button>
     </div>
-    <div class="item">
-        <label>Roti Sosij (RM 1): </label>
-        <input type="number" id="rotiSosij" min="0" value="0">
-    </div>
-    <div class="item">
-        <label>Donut (60sen): </label>
-        <input type="number" id="donut" min="0" value="0">
-    </div>
-    <button onclick="addOrder()">Tambah Order</button>
-    <h3>Jumlah Semasa: RM <span id="total">0</span></h3>
+    <div id="currentOrder">Order Semasa: <span id="currentItems"></span> | Jumlah: RM <span id="total">0</span></div>
+    <button onclick="addOrder()">Sahkan Order</button>
 
     <h3>Senarai Order</h3>
     <table id="orderTable">
@@ -93,40 +78,47 @@
     <script>
         let orderCount = 0;
         let orders = [];
+        let currentOrder = {};
 
-        function calculateTotal() {
-            let total = 0;
-            total += document.getElementById("blueLemon").value * 5;
-            total += document.getElementById("apple").value * 5;
-            total += document.getElementById("blackcurrant").value * 5;
-            total += document.getElementById("bobaMilktea").value * 5;
-            total += document.getElementById("fnOren").value * 1;
-            total += document.getElementById("susuBerisi").value * 3;
-            total += document.getElementById("popis").value * 1.50;
-            total += document.getElementById("rotiSosij").value * 1;
-            total += document.getElementById("donut").value * 0.60;
-            document.getElementById("total").innerHTML = total.toFixed(2);
-            return total;
+        function addItem(name, price) {
+            currentOrder[name] = (currentOrder[name] || 0) + 1;
+            updateCurrentOrder();
+        }
+
+        function updateCurrentOrder() {
+            let itemsText = Object.entries(currentOrder)
+                .map(([name, qty]) => `${name} x${qty}`)
+                .join(", ") || "Tiada item";
+            let total = Object.entries(currentOrder)
+                .reduce((sum, [name, qty]) => sum + qty * getPrice(name), 0);
+            document.getElementById("currentItems").innerText = itemsText;
+            document.getElementById("total").innerText = total.toFixed(2);
+        }
+
+        function getPrice(item) {
+            const prices = {
+                "Blue Lemon": 5, "Apple": 5, "Blackcurrant": 5, "Boba Milktea": 5,
+                "F&N Oren": 1, "F&N Soda": 1, "F&N Fruity": 1, "F&N Strawberry": 1,
+                "Pepsi": 1, "A&W": 1, "Cola": 1, "Cola Zero": 1, "Susu Berisi": 3,
+                "Popis": 1.50, "Roti Sosij": 1, "Donut": 0.60
+            };
+            return prices[item] || 0;
         }
 
         function addOrder() {
-            let total = calculateTotal();
+            let total = parseFloat(document.getElementById("total").innerText);
             if (total === 0) {
-                alert("Sila masukkan sekurang-kurangnya satu item!");
+                alert("Sila tambah sekurang-kurangnya satu item!");
                 return;
             }
             orderCount++;
-            let items = [];
-            for (let id of ["blueLemon", "apple", "blackcurrant", "bobaMilktea", "fnOren", "susuBerisi", "popis", "rotiSosij", "donut"]) {
-                let qty = document.getElementById(id).value;
-                if (qty > 0) {
-                    let name = document.getElementById(id).previousElementSibling.textContent.replace(": ", "").replace(" (RM *)", "");
-                    items.push(`${name} x${qty}`);
-                }
-            }
-            orders.push({ id: orderCount, items: items.join(", "), total: total });
+            let items = Object.entries(currentOrder)
+                .map(([name, qty]) => `${name} x${qty}`)
+                .join(", ");
+            orders.push({ id: orderCount, items: items, total: total });
             updateOrderTable();
-            resetInputs();
+            currentOrder = {};
+            updateCurrentOrder();
         }
 
         function updateOrderTable() {
@@ -138,12 +130,6 @@
                 row.insertCell(1).innerText = order.items;
                 row.insertCell(2).innerText = order.total.toFixed(2);
             });
-        }
-
-        function resetInputs() {
-            let inputs = document.getElementsByTagName("input");
-            for (let input of inputs) input.value = 0;
-            document.getElementById("total").innerHTML = "0";
         }
     </script>
 </body>
