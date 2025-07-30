@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Adik's Cashier</title>
+    <title>De Nyanya Cashier</title>
     <style>
         body { font-family: Arial; text-align: center; }
         .item { margin: 10px; }
@@ -11,14 +11,72 @@
     </style>
 </head>
 <body>
-    <h2>Adik's Cashier System</h2>
+    <h2>De Nyanya Cashier System</h2>
+    <h3>Minuman</h3>
     <div class="item">
-        <label>Nasi Lemak (RM 5): </label>
-        <input type="number" id="nasiLemak" min="0" value="0">
+        <label>Blue Lemon (RM 5): </label>
+        <input type="number" id="blueLemon" min="0" value="0">
     </div>
     <div class="item">
-        <label>Teh Ais (RM 2): </label>
-        <input type="number" id="tehAis" min="0" value="0">
+        <label>Apple (RM 5): </label>
+        <input type="number" id="apple" min="0" value="0">
+    </div>
+    <div class="item">
+        <label>Blackcurrant (RM 5): </label>
+        <input type="number" id="blackcurrant" min="0" value="0">
+    </div>
+    <div class="item">
+        <label>Boba Milktea (RM 5): </label>
+        <input type="number" id="bobaMilktea" min="0" value="0">
+    </div>
+    <div class="item">
+        <label>F&N Oren (RM 1): </label>
+        <input type="number" id="fnOren" min="0" value="0">
+    </div>
+    <div class="item">
+        <label>F&N Soda (RM 1): </label>
+        <input type="number" id="fnSoda" min="0" value="0">
+    </div>
+    <div class="item">
+        <label>F&N Fruity (RM 1): </label>
+        <input type="number" id="fnFruity" min="0" value="0">
+    </div>
+    <div class="item">
+        <label>F&N Strawberry (RM 1): </label>
+        <input type="number" id="fnStrawberry" min="0" value="0">
+    </div>
+    <div class="item">
+        <label>Pepsi (RM 1): </label>
+        <input type="number" id="pepsi" min="0" value="0">
+    </div>
+    <div class="item">
+        <label>A&W (RM 1): </label>
+        <input type="number" id="aw" min="0" value="0">
+    </div>
+    <div class="item">
+        <label>Cola (RM 1): </label>
+        <input type="number" id="cola" min="0" value="0">
+    </div>
+    <div class="item">
+        <label>Cola Zero (RM 1): </label>
+        <input type="number" id="colaZero" min="0" value="0">
+    </div>
+    <div class="item">
+        <label>Susu Berisi (RM 3): </label>
+        <input type="number" id="susuBerisi" min="0" value="0">
+    </div>
+    <h3>Lain-lain</h3>
+    <div class="item">
+        <label>Popis (2pcs RM 1.50): </label>
+        <input type="number" id="popis" min="0" value="0">
+    </div>
+    <div class="item">
+        <label>Roti Sosij (RM 1): </label>
+        <input type="number" id="rotiSosij" min="0" value="0">
+    </div>
+    <div class="item">
+        <label>Donut (60sen): </label>
+        <input type="number" id="donut" min="0" value="0">
     </div>
     <button onclick="addOrder()">Tambah Order</button>
     <h3>Jumlah Semasa: RM <span id="total">0</span></h3>
@@ -27,9 +85,8 @@
     <table id="orderTable">
         <tr>
             <th>Order #</th>
-            <th>Nasi Lemak</th>
-            <th>Teh Ais</th>
-            <th>Jumlah (RM)</th>
+            <th>Item & Jumlah</th>
+            <th>Total (RM)</th>
         </tr>
     </table>
 
@@ -38,40 +95,61 @@
         let orders = [];
 
         function calculateTotal() {
-            let nasiLemak = document.getElementById("nasiLemak").value * 5;
-            let tehAis = document.getElementById("tehAis").value * 2;
-            let total = nasiLemak + tehAis;
+            let total = 0;
+            total += document.getElementById("blueLemon").value * 5;
+            total += document.getElementById("apple").value * 5;
+            total += document.getElementById("blackcurrant").value * 5;
+            total += document.getElementById("bobaMilktea").value * 5;
+            total += document.getElementById("fnOren").value * 1;
+            total += document.getElementById("fnSoda").value * 1;
+            total += document.getElementById("fnFruity").value * 1;
+            total += document.getElementById("fnStrawberry").value * 1;
+            total += document.getElementById("pepsi").value * 1;
+            total += document.getElementById("aw").value * 1;
+            total += document.getElementById("cola").value * 1;
+            total += document.getElementById("colaZero").value * 1;
+            total += document.getElementById("susuBerisi").value * 3;
+            total += document.getElementById("popis").value * 1.50;
+            total += document.getElementById("rotiSosij").value * 1;
+            total += document.getElementById("donut").value * 0.60;
             document.getElementById("total").innerHTML = total.toFixed(2);
-            return { nasiLemak: parseInt(document.getElementById("nasiLemak").value), tehAis: parseInt(document.getElementById("tehAis").value), total };
+            return total;
         }
 
         function addOrder() {
-            let order = calculateTotal();
-            if (order.nasiLemak === 0 && order.tehAis === 0) {
+            let total = calculateTotal();
+            if (total === 0) {
                 alert("Sila masukkan sekurang-kurangnya satu item!");
                 return;
             }
             orderCount++;
-            orders.push({ id: orderCount, nasiLemak: order.nasiLemak, tehAis: order.tehAis, total: order.total });
+            let items = [];
+            for (let id of ["blueLemon", "apple", "blackcurrant", "bobaMilktea", "fnOren", "fnSoda", "fnFruity", "fnStrawberry", "pepsi", "aw", "cola", "colaZero", "susuBerisi", "popis", "rotiSosij", "donut"]) {
+                let qty = document.getElementById(id).value;
+                if (qty > 0) {
+                    let name = document.getElementById(id).previousElementSibling.textContent.replace(": ", "").replace(" (RM *)", "");
+                    items.push(`${name} x${qty}`);
+                }
+            }
+            orders.push({ id: orderCount, items: items.join(", "), total: total });
             updateOrderTable();
             resetInputs();
         }
 
         function updateOrderTable() {
             let table = document.getElementById("orderTable");
-            while (table.rows.length > 1) table.deleteRow(1); // Kosongkan senarai kecuali header
+            while (table.rows.length > 1) table.deleteRow(1);
             orders.forEach(order => {
                 let row = table.insertRow();
                 row.insertCell(0).innerText = order.id;
-                row.insertCell(1).innerText = order.nasiLemak;
-                row.insertCell(2).innerText = order.tehAis;
-                row.insertCell(3).innerText = order.total.toFixed(2);
+                row.insertCell(1).innerText = order.items;
+                row.insertCell(2).innerText = order.total.toFixed(2);
             });
         }
 
         function resetInputs() {
-            document.getElementById("nasiLemak").value = 0;
-            document.getElementById("tehAis").value = 0;
+            let inputs = document.getElementsByTagName("input");
+            for (let input of inputs) input.value = 0;
             document.getElementById("total").innerHTML = "0";
         }
     </script>
