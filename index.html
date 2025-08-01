@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>De Nyanya Cashier</title>
+    <title>De Nyanya Cashier (Google Sheets)</title>
     <style>
         body {
             font-family: Arial;
@@ -28,6 +28,7 @@
             margin: 20px auto;
             border-collapse: collapse;
             background-color: #333333;
+            width: 90%;
         }
         th, td {
             border: 1px solid #FFFFFF;
@@ -36,11 +37,15 @@
         }
         .coffee-icon { width: 30px; vertical-align: middle; margin-right: 10px; }
         #currentOrder { margin: 20px; font-size: 1.2em; }
+        .status-pending { color: yellow; }
+        .status-completed { color: green; }
+        #trackingResult { margin: 20px; padding: 10px; border: 1px solid #FFFFFF; }
     </style>
 </head>
 <body>
     <h2>De Nyanya Cashier</h2>
     <img src="https://via.placeholder.com/50" alt="Coffee Icon" class="coffee-icon">
+    
     <h3>Minuman</h3>
     <div class="button-group">
         <button onclick="addItem('Blue Lemon', 5)">Blue Lemon (RM 5)</button>
@@ -57,45 +62,69 @@
         <button onclick="addItem('Cola Zero', 1)">Cola Zero (RM 1)</button>
         <button onclick="addItem('Susu Berisi', 3)">Susu Berisi (RM 3)</button>
     </div>
+    
     <h3>Lain-lain</h3>
     <div class="button-group">
         <button onclick="addItem('Popis', 1.50)">Popis (RM 1.50)</button>
         <button onclick="addItem('Roti Sosij', 1)">Roti Sosij (RM 1)</button>
         <button onclick="addItem('Donut', 0.60)">Donut (RM 0.60)</button>
     </div>
-    <div id="currentOrder">Order Semasa: <span id="currentItems"></span> | Jumlah: RM <span id="total">0</span></div>
+    
+    <div id="currentOrder">
+        Order Semasa: <span id="currentItems"></span> | Jumlah: RM <span id="total">0</span>
+    </div>
+    
     <button onclick="addOrder()">Sahkan Order</button>
-    <button onclick="exportToGoogleSheets()">Eksport ke Google Sheets</button>
+    <button onclick="trackOrder()">Lacak Order</button>
+    <button onclick="viewAllOrders()">Lihat Semua Order</button>
+
+    <div id="trackingResult" style="display:none;">
+        <h3>Maklumat Order</h3>
+        <p>ID: <span id="track-id"></span></p>
+        <p>Item: <span id="track-items"></span></p>
+        <p>Jumlah: RM <span id="track-total"></span></p>
+        <p>Status: <span id="track-status" class="status-pending"></span></p>
+    </div>
 
     <h3>Senarai Order</h3>
     <table id="orderTable">
-        <tr>
-            <th>Order #</th>
-            <th>Item & Jumlah</th>
-            <th>Total (RM)</th>
-        </tr>
+        <thead>
+            <tr>
+                <th>Order #</th>
+                <th>Item & Jumlah</th>
+                <th>Total (RM)</th>
+                <th>Status</th>
+            </tr>
+        </thead>
+        <tbody></tbody>
     </table>
 
     <script>
-        let orderCount = 0;
-        let orders = [];
+        // Konfigurasi Google Apps Script
+        const WEB_APP_URL = "https://script.google.com/macros/s/YOUR_SCRIPT_ID/exec"; // Ganti dengan URL Web App Anda
+        
         let currentOrder = {};
-
+        
+        // Fungsi untuk menambah item ke order semasa
         function addItem(name, price) {
             currentOrder[name] = (currentOrder[name] || 0) + 1;
             updateCurrentOrder();
         }
-
+        
+        // Fungsi untuk mengupdate tampilan order semasa
         function updateCurrentOrder() {
             let itemsText = Object.entries(currentOrder)
                 .map(([name, qty]) => `${name} x${qty}`)
                 .join(", ") || "Tiada item";
+                
             let total = Object.entries(currentOrder)
                 .reduce((sum, [name, qty]) => sum + qty * getPrice(name), 0);
+                
             document.getElementById("currentItems").innerText = itemsText;
             document.getElementById("total").innerText = total.toFixed(2);
         }
-
+        
+        // Fungsi untuk mendapatkan harga item
         function getPrice(item) {
             const prices = {
                 "Blue Lemon": 5, "Apple": 5, "Blackcurrant": 5, "Boba Milktea": 5,
@@ -105,50 +134,111 @@
             };
             return prices[item] || 0;
         }
-
-        function addOrder() {
-            let total = parseFloat(document.getElementById("total").innerText);
+        
+        // Fungsi untuk menyimpan order ke Google Sheets
+        async function addOrder() {
+            const total = parseFloat(document.getElementById("total").innerText);
             if (total === 0) {
                 alert("Sila tambah sekurang-kurangnya satu item!");
                 return;
             }
-            orderCount++;
-            let items = Object.entries(currentOrder)
-                .map(([name, qty]) => `${name} x${qty}`)
-                .join(", ");
-            orders.push({ id: orderCount, items: items, total: total });
-            updateOrderTable();
-            currentOrder = {};
-            updateCurrentOrder();
-        }
-
-        function updateOrderTable() {
-            let table = document.getElementById("orderTable");
-            while (table.rows.length > 1) table.deleteRow(1);
-            orders.forEach(order => {
-                let row = table.insertRow();
-                row.insertCell(0).innerText = order.id;
-                row.insertCell(1).innerText = order.items;
-                row.insertCell(2).innerText = order.total.toFixed(2);
-            });
-        }
-
-        function exportToGoogleSheets() {
-            if (orders.length === 0) {
-                alert("Tiada order untuk dieksport!");
-                return;
+            
+            const orderData = {
+                order_id: "ORD-" + Date.now(),
+                items: Object.entries(currentOrder).map(([name, qty]) => `${name} x${qty}`).join(", "),
+                total: total,
+                status: "pending"
+            };
+            
+            try {
+                const response = await fetch(WEB_APP_URL, {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json",
+                    },
+                    body: JSON.stringify(orderData)
+                });
+                
+                const result = await response.json();
+                if (result.success) {
+                    alert(`Order berjaya disimpan! ID: ${result.order_id}`);
+                    currentOrder = {};
+                    updateCurrentOrder();
+                    viewAllOrders(); // Refresh senarai order
+                } else {
+                    alert("Error: " + result.message);
+                }
+            } catch (error) {
+                alert("Error: " + error.message);
             }
-            let csvContent = "Order #,Item & Jumlah,Total (RM)\n" + 
-                orders.map(order => `${order.id},${order.items},${order.total.toFixed(2)}`).join("\n");
-            let spreadsheetId = "YOUR_SPREADSHEET_ID_HERE"; // Ganti dengan ID Spreadsheet awak
-            let sheetName = "Orders"; // Nama sheet dalam Google Sheets
-            let url = `https://script.google.com/macros/s/YOUR_SCRIPT_ID_HERE/exec?spreadsheetId=${spreadsheetId}&sheetName=${sheetName}&data=${encodeURIComponent(csvContent)}`;
-
-            fetch(url)
-                .then(response => response.text())
-                .then(data => alert("Data dieksport ke Google Sheets: " + data))
-                .catch(error => alert("Ralat semasa eksport: " + error));
         }
+        
+        // Fungsi untuk melacak order
+        async function trackOrder() {
+            const orderId = prompt("Masukkan ID Order:");
+            if (!orderId) return;
+            
+            try {
+                const response = await fetch(`${WEB_APP_URL}?order_id=${orderId}`);
+                const order = await response.json();
+                
+                if (order.order_id) {
+                    document.getElementById("track-id").textContent = order.order_id;
+                    document.getElementById("track-items").textContent = order.items;
+                    document.getElementById("track-total").textContent = order.total.toFixed(2);
+                    
+                    const statusElement = document.getElementById("track-status");
+                    statusElement.textContent = order.status;
+                    statusElement.className = `status-${order.status.toLowerCase()}`;
+                    
+                    document.getElementById("trackingResult").style.display = "block";
+                } else {
+                    alert("Order tidak ditemukan!");
+                }
+            } catch (error) {
+                alert("Error: " + error.message);
+            }
+        }
+        
+        // Fungsi untuk melihat semua order
+        async function viewAllOrders() {
+            try {
+                const response = await fetch(WEB_APP_URL);
+                const orders = await response.json();
+                
+                const tableBody = document.querySelector("#orderTable tbody");
+                tableBody.innerHTML = "";
+                
+                orders.forEach(order => {
+                    const row = document.createElement("tr");
+                    
+                    const idCell = document.createElement("td");
+                    idCell.textContent = order.order_id;
+                    
+                    const itemsCell = document.createElement("td");
+                    itemsCell.textContent = order.items;
+                    
+                    const totalCell = document.createElement("td");
+                    totalCell.textContent = order.total.toFixed(2);
+                    
+                    const statusCell = document.createElement("td");
+                    statusCell.textContent = order.status;
+                    statusCell.className = `status-${order.status.toLowerCase()}`;
+                    
+                    row.appendChild(idCell);
+                    row.appendChild(itemsCell);
+                    row.appendChild(totalCell);
+                    row.appendChild(statusCell);
+                    
+                    tableBody.appendChild(row);
+                });
+            } catch (error) {
+                console.error("Error:", error);
+            }
+        }
+        
+        // Muat semua order saat halaman dimuat
+        window.onload = viewAllOrders;
     </script>
 </body>
 </html>
